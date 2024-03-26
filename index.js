@@ -6,7 +6,6 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const useragent = require("express-useragent");
 const routes = require("./routes");
-import Note, { find, findById, updateOne, remove } from './models/note';
 
 const connectDB = require("./config/db");
 
@@ -63,58 +62,4 @@ app.get("*", function(req, res) {
 app.listen(port, (err) => {
   if (err) throw err;
   console.log(`Connection Established!! http://localhost:${port}`);
-});
-
-
-// CRUD operations
-app.post('/notes', async (req, res) => {
-  const note = new Note({
-    title: req.body.title,
-    content: req.body.content
-  });
-  try {
-    const savedNote = await note.save();
-    res.json(savedNote);
-  } catch (error) {
-    res.json({ message: error });
-  }
-});
-
-app.get('/notes', async (req, res) => {
-  try {
-    const notes = await find();
-    res.json(notes);
-  } catch (error) {
-    res.json({ message: error });
-  }
-});
-
-app.get('/notes/:noteId', async (req, res) => {
-  try {
-    const note = await findById(req.params.noteId);
-    res.json(note);
-  } catch (error) {
-    res.json({ message: error });
-  }
-});
-
-app.patch('/notes/:noteId', async (req, res) => {
-  try {
-    const updatedNote = await updateOne(
-      { _id: req.params.noteId },
-      { $set: { title: req.body.title, content: req.body.content } }
-    );
-    res.json(updatedNote);
-  } catch (error) {
-    res.json({ message: error });
-  }
-});
-
-app.delete('/notes/:noteId', async (req, res) => {
-  try {
-    const removedNote = await remove({ _id: req.params.noteId });
-    res.json(removedNote);
-  } catch (error) {
-    res.json({ message: error });
-  }
 });

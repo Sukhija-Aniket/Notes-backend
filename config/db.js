@@ -7,11 +7,12 @@ const connectDB = async () => {
       useUnifiedTopology: true 
       // useFindAndModify: false,
     });
-    
+
     console.log(`[STATUS] Connected to Database: ${conn.connection.name}`);
   } catch (err) {
     console.error(err);
-    process.exit(1);
+    console.log("Unable to Connect to Database")
+    // process.exit(1);
 }
 };
 

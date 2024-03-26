@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>Welcome, <%= user.userName %>!</h1>
+    <% if (notes.length > 0) { %>
+        <h2>Your Notes</h2>
+        <% notes.forEach(function(note) { %>
+            <div class="note">
+                <h3><%= note.title %></h3>
+                <form action="/viewNote" method="POST">
+                    <input type="hidden" name="noteId" value="<%= note._id %>">
+                    <button type="submit">View Note</button>
+                </form>
+                <!-- <form action="/updateNote" method="POST">
+                    <input type="hidden" name="noteId" value="<%= note._id %>">
+                    <button type="submit">Update Note</button>
+                </form> -->
+                <form action="/deleteNote" method="POST">
+                    <input type="hidden" name="noteId" value="<%= note._id %>">
+                    <button type="submit">Delete Note</button>
+                </form>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>You have no notes.</p>
+    <% } %>
+    <h2>Add a new note</h2>
+    <form id="createNote" method="POST">
+        <input type="text" id="title" name="title" placeholder="Title" required>
+        <textarea id="content" name="content" placeholder="Content" required></textarea>
+        <button type="submit">Add Note</button>
+    </form>
+    <h2>Update Note</h2>
+    <form id="updateNote">
+        <input type="text" id="id" name="_id" placeholder="id" required>
+        <input type="text" id="title" name="id" placeholder="Title" required>
+        <textarea id="content" name="content" placeholder="Content" required>
+        <button type="submit">Update Note</button>
+    </form>
+    
+</body>
+</html>
