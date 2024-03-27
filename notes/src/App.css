@@ -1,0 +1,207 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 20px;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+.note {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.note h3 {
+  margin-top: 0;
+}
+
+.note button {
+  margin-right: 10px;
+}
+
+#updateNoteModal .modal-content {
+  background-color: #f9f9f9;
+}
+
+#updateNoteModal .form-group label {
+  color: #555;
+}
+
+#updateNoteModal .form-group input, 
+#updateNoteModal .form-group textarea {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+}
+
+#updateNoteModal .form-group textarea {
+  resize: vertical;
+}
+
+#updateNoteModal .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+#updateNoteModal .btn-secondary {
+  background-color: #6c757d;
+}
+
+#updateNoteModal .modal-footer {
+  border-top: 1px solid #eee;
+}
+
+#createNote input, 
+#createNote textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.createNote {
+  background-color: darkorange;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#createNote button:hover {
+  opacity: 0.8;
+}
+
+
+.note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* ... other styles ... */
+}
+
+.note-content {
+  flex-grow: 1;
+  /* ... other styles ... */
+}
+
+.note-actions {
+  display: flex;
+  align-items: center;
+}
+
+.note-btn {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 1.2em;
+  padding: 0.5em;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.note-btn:hover {
+  color: #007bff;
+}
+
+.view-note-btn {
+  color: #28a745; /* Optional: different color for view button */
+}
+
+.update-note-btn {
+  color: #ffc107; /* Optional: different color for edit button */
+}
+
+.delete-note-btn {
+  color: #dc3545; /* Optional: different color for delete button */
+}
+
+
+.note-btn.view-note-btn {
+  background-color: #28a745; /* Bootstrap primary blue */
+  color: white;
+  border-radius: 4px;
+  padding: 0.5em 0.75em;
+  border: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.note-btn.update-note-btn {
+  background-color: #ffc107; /* Bootstrap primary blue */
+  color: white;
+  border-radius: 4px;
+  padding: 0.5em 0.75em;
+  border: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.note-btn.delete-note-btn {
+  background-color: #dc3545; /* Bootstrap primary blue */
+  color: white;
+  border-radius: 4px;
+  padding: 0.5em 0.75em;
+  border: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.note-btn.view-note-btn i {
+  margin-right: 5px;
+}
+
+.note-btn.update-note-btn i {
+  margin-right: 5px;
+}
+
+.note-btn.delete-note-btn i {
+  margin-right: 5px;
+}
+
+
+.note-btn.view-note-btn:hover {
+  background-color: #0056b3; /* A darker blue on hover */
+}
+
+.note-btn.update-note-btn:hover {
+  background-color: #0056b3; /* A darker blue on hover */
+}
+
+.note-btn.delete-note-btn:hover {
+  background-color: #0056b3; /* A darker blue on hover */
+}
+
+.landing-page-container {
+  text-align: center; /* Centers the content */
+  padding-top: 50px; /* Adds some padding at the top */
+}
+
+.landing-page-title {
+  margin-bottom: 30px; /* Adds some space below the title */
+}
+
+.landing-page-buttons {
+  display: inline-flex; /* Aligns buttons in a row */
+  gap: 20px; /* Adds space between the buttons */
+  justify-content: center; /* Centers the buttons container */
+}
+
+.landing-page-link {
+  text-decoration: none; /* Removes underline from links */
+}
+
+/* If you decide to use a spacer instead of gap property */
+.landing-page-button-spacer {
+  width: 20px; /* Space between buttons */
+  display: inline-block; /* Keeps the spacer inline with buttons */
+}
+

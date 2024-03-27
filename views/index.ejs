@@ -1,47 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <title>Welcome</title>
 </head>
+
 <body>
     <h1>Welcome, <%= user.userName %>!</h1>
-    <% if (notes.length > 0) { %>
+    <% if (notes.length> 0) { %>
         <h2>Your Notes</h2>
         <% notes.forEach(function(note) { %>
             <div class="note">
-                <h3><%= note.title %></h3>
-                <form action="/viewNote" method="POST">
+                <div class="note-content">
+                    <h3>
+                        <%= note.title %>
+                    </h3>
+                </div>
+                <button type="button" class="note-btn view-note-btn" title="View Note"
+                    onclick="showNoteInCarousel('<%= note._id %>', '<%= note.title %>', '<%= note.content %>')">
+                    <i class="far fa-eye">View Note</i>
+                </button>
+
+                <!-- <form action="/viewNote" method="POST">
                     <input type="hidden" name="noteId" value="<%= note._id %>">
                     <button type="submit">View Note</button>
-                </form>
-                <!-- <form action="/updateNote" method="POST">
-                    <input type="hidden" name="noteId" value="<%= note._id %>">
-                    <button type="submit">Update Note</button>
-                </form> -->
-                <form action="/deleteNote" method="POST">
-                    <input type="hidden" name="noteId" value="<%= note._id %>">
-                    <button type="submit">Delete Note</button>
-                </form>
+                    </form> -->
+
+                <button type="button" class="note-btn update-note-btn"
+                    onclick="showUpdateModal('<%= note._id %>', '<%= note.title %>', '<%= note.content %>')">
+                    <i class="far fa-eye">Update Note</i>
+                </button>
+
+                <!-- Note Viewing Carousel Modal -->
+                <div class="modal fade" id="viewNoteModal" tabindex="-1" aria-labelledby="viewNoteModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewNoteModalLabel">View Note</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Carousel Placeholder -->
+                                <div id="noteViewCarousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item" id="carouselItem">
+                                            <!-- Note content will be inserted dynamically -->
+                                        </div>
+                                        <!-- Add more carousel items if you want multiple notes to be viewable in the carousel -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Update Note Modal -->
+                <div class="modal fade" id="updateNoteModal" tabindex="-1" aria-labelledby="updateNoteModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateNoteModalLabel">Update Note</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Carousel Placeholder -->
+                                <div id="noteCarousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <form id="updateNoteForm">
+                                                <input type="hidden" name="noteId" value=<%=note._id %>>
+                                                <div class="form-group">
+                                                    <label for="noteTitle">Title</label>
+                                                    <input type="text" class="form-control" id="noteTitle"
+                                                        name="noteTitle" value="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="noteContent">Content</label>
+                                                    <textarea class="form-control" id="noteContent" name="noteContent"
+                                                        rows="3"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="submitUpdate()">Save
+                                    changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="button" class="note-btn delete-note-btn" onclick="deleteNote('<%= note._id %>')">
+                    <i class="far fa-eye">Delete Note</i>
+                </button>
+
             </div>
         <% }); %>
     <% } else { %>
         <p>You have no notes.</p>
     <% } %>
     <h2>Add a new note</h2>
-    <form id="createNote" method="POST">
+    <form id="createNote" action="/createNote" method="POST">
         <input type="text" id="title" name="title" placeholder="Title" required>
         <textarea id="content" name="content" placeholder="Content" required></textarea>
         <button type="submit">Add Note</button>
     </form>
-    <h2>Update Note</h2>
-    <form id="updateNote">
-        <input type="text" id="id" name="_id" placeholder="id" required>
-        <input type="text" id="title" name="id" placeholder="Title" required>
-        <textarea id="content" name="content" placeholder="Content" required>
-        <button type="submit">Update Note</button>
-    </form>
-    
+
+    <script>
+        function showUpdateModal(noteId, title, content) {
+            // Populate the form with the note's data
+            document.querySelector('#updateNoteForm input[name="noteId"]').value = noteId;
+            document.querySelector('#updateNoteForm input[name="noteTitle"]').value = title;
+            document.querySelector('#updateNoteForm textarea[name="noteContent"]').innerHTML = content;
+
+            // Show the modal
+            $('#updateNoteModal').modal('show');
+        }
+
+        function deleteNote(noteId) {
+            $.ajax({
+                url: '/deleteNote',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ noteId: noteId }),
+                success: function (response) {
+                    alert(response.message); // Or any other success notification
+                },
+                error: function () {
+                    alert("Error Deleting note."); // Or any other error notification
+                }
+            });
+        }
+
+        function submitUpdate() {
+            var noteId = document.querySelector('#updateNoteForm input[name="noteId"]').value;
+            var title = document.querySelector('#updateNoteForm input[name="noteTitle"]').value;
+            var content = document.querySelector('#updateNoteForm textarea[name="noteContent"]').value;
+            // Perform AJAX submission here
+            $.ajax({
+                url: '/updateNote',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ noteId: noteId, title: title, content: content }),
+                success: function (response) {
+                    alert(response.message); // Or any other success notification
+                },
+                error: function () {
+                    alert("Error updating note."); // Or any other error notification
+                }
+            });
+            // After successful submission:
+            $('#updateNoteModal').modal('hide');
+            // Reload the page or update the UI as needed
+        }
+
+        function showNoteInCarousel(noteId, title, content) {
+            // Escape potential HTML in the note content for security
+            content = content.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+            // Set the title
+            document.getElementById('viewNoteModalLabel').innerText = title;
+
+            // Set the content
+            var carouselItem = document.getElementById('carouselItem');
+            carouselItem.classList.add('active'); // Make sure to set it as active for the carousel
+            carouselItem.innerHTML = `<p>${content}</p>`; // Insert the content into the carousel item
+
+            // Show the modal
+            $('#viewNoteModal').modal('show');
+        }
+
+    </script>
 </body>
+
 </html>

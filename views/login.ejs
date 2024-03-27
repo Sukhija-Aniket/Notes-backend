@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <% if (message) { %>
+        <p style="color: red;"><%= message %></p>
+    <% } %>
+    <form action="/login" method="POST">
+        <div>
+            <label for="userName">UserName:</label>
+            <input type="text" id="userName" name="userName" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+    </form>
+</body>
+</html>

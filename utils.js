@@ -1,15 +1,26 @@
 const passport = require("passport");
+const bcrypt = require("bcryptjs")
 const UserTable = require("./models/user");
 const NoteTable = require("./models/note");
 
 module.exports = {
-    localUserLogin: passport.authenticate("user-local", {
-        successRedirect: "/",
-        failureRedirect: "/login",
-    }),
+    localUserLogin: (req, res, next) => {
+        console.log("post request sent to login");
+        passport.authenticate("user-local", function (err, user, info) {
+            if (err) { return next(err); }
+            if (!user) {
+                return res.status(401).json({ success: false, message: "Incorrect UserName or Password" });
+            }
+            req.logIn(user, function (err) {
+                if (err) { return next(err); }
+                // Authentication succeeded
+                return res.json({ success: true, message: "Logged in successfully", user: user });
+            });
+        })(req, res, next)
+    },
 
     getIndexPageData: async function (req) {
-        const notes = NoteTable.find({user_id: req.user._id});
+        const notes = await NoteTable.find({ user_id: req.user._id });
         const context = {
             notes: notes,
         }
@@ -17,8 +28,8 @@ module.exports = {
     },
 
     userRegister: async function (req) {
-        const {userName, password } = req.body;
-        if (name.length == 0) {
+        const { userName, password } = req.body;
+        if (userName.length == 0) {
             const message = "User name cannot be empty";
             return message;
         }
@@ -26,7 +37,7 @@ module.exports = {
             const message = "Password is too Short";
             return message;
         }
-        const oldUser = await UserTable.findOne( {userName });
+        const oldUser = await UserTable.findOne({ userName });
 
         if (oldUser) {
             const message = "user already Exists";
