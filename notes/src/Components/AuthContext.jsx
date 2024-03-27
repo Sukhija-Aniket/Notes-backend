@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     axios.get('http://localhost:8000/isAuthenticated', { withCredentials: true })
       .then(response => {
-        console.log("response is here:", response)
         if (response.data.authenticated) {
           setIsAuthenticated(response.data.authenticated);
           setUser(response.data.user);
@@ -30,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       if (response.ok) {
         setIsAuthenticated(false);
         setUser(false);
-        console.log("Successfully Logged Out!");
+        console.info("Successfully Logged Out!");
       } else {
         console.error('Failed to clear session Cookie!');
       }

@@ -134,8 +134,11 @@ router.post('/deleteNote', userCheck, async (req, res) => {
     console.log("Post request sent to delete Note");
     try {
         const removedNote = await NoteTable.deleteOne({ _id: req.body._id });
-        console.log(removedNote); // TODO: to work on it
-        res.json({success: true, message: "Note Deleted Successfully"});
+        if (removedNote.deletedCount > 0) {
+            res.json({success: true, message: "Note Deleted Successfully"});
+        } else {
+            res.status(401).json({success: false, message: "Note Could not be deleted!"});
+        }
     } catch (error) {
         res.status(401).json({ message: error });
     }

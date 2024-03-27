@@ -33,15 +33,14 @@ const NotesIndex = () => {
     }));
   };
 
-  const handleSaveNote = async() => {
+  const handleSaveNote = async () => {
     if (!selectedNote) {
       return;
     }
     try {
-      console.log("this is selected Note: ", selectedNote);
-      const response = await axios.post('http://localhost:8000/updateNote', selectedNote, {withCredentials: true});
+      const response = await axios.post('http://localhost:8000/updateNote', selectedNote, { withCredentials: true });
       if (response.data.success) {
-        setNotes(notes.map(note => note._id === selectedNote._id ? response.data.note: note));
+        setNotes(notes.map(note => note._id === selectedNote._id ? response.data.note : note));
       }
       setShowUpdateModal(false);
     } catch (error) {
@@ -49,83 +48,84 @@ const NotesIndex = () => {
     }
   }
 
-  const deleteNote = (_id) => {
-    axios.post(`http://localhost:8000/deleteNote`, { _id: _id }, { withCredentials: true })
-      .then(() => {
+  const deleteNote = async (_id) => {
+    try {
+      const response = await axios.post(`http://localhost:8000/deleteNote`, { _id: _id }, { withCredentials: true })
+      if (response.data.success) {
         setNotes(notes.filter(note => note._id !== _id));
-      })
-      .catch(error => console.error('Error deleting note:', error));
+      }
+    } catch (error) {
+      console.error('Error deleting note:', error);
+    } 
   };
 
-  const addNote = () => {
-    axios.post('http://localhost:8000/createNote', newNote, { withCredentials: true })
-      .then(response => {
-        setNotes(prevNotes => {
-          const updatedNotes = [...prevNotes, response.data]
-          return updatedNotes;
-        }); // Ensure the backend sends the created note object in the response
-        setNewNote({ title: '', content: '' }); // Clear the form
-      })
-      .catch(error => console.error('Error adding note:', error));
-  };
+const addNote = () => {
+  axios.post('http://localhost:8000/createNote', newNote, { withCredentials: true })
+    .then(response => {
+      setNotes(prevNotes => {
+        const updatedNotes = [...prevNotes, response.data]
+        return updatedNotes;
+      }); 
+      setNewNote({ title: '', content: '' }); 
+    })
+    .catch(error => console.error('Error adding note:', error));
+};
 
-  // Implement the updateNote and deleteNote functions here, following the same pattern as addNote
-
-  return (
-    <div className="container mt-5">
-      <h1>Welcome, {user.userName}!</h1>
-      <Button onClick={logout} className="btn btn-danger mb-3">Logout</Button>
-      {notes.length > 0 ? (
-        <>
-          <h2>Your Notes</h2>
-          {notes.map(note => (
-            <div key={note._id} className="note card my-3">
-              <div className="card-body">
-                <h3 className="card-title">{note.title}</h3>
-                <Button variant='primary' className="note-btn view-note-btn" onClick={() => { setSelectedNote(note); setShowViewModal(true); }}>
-                  View Note
-                </Button>
-                <Button variant='warning' className="note-btn update-note-btn" onClick={() => { setSelectedNote(note); setShowUpdateModal(true); }}>
-                  Update Note
-                </Button>
-                <Button variant='danger' className="note-btn delete-note-btn" onClick={() => deleteNote(note._id)}>Delete Note</Button>
-              </div>
+return (
+  <div className="container mt-5">
+    <h1>Welcome, {user.userName}!</h1>
+    <Button onClick={logout} className="btn btn-danger mb-3">Logout</Button>
+    {notes.length > 0 ? (
+      <>
+        <h2>Your Notes</h2>
+        {notes.map(note => (
+          <div key={note._id} className="note card my-3">
+            <div className="card-body">
+              <h3 className="card-title">{note.title}</h3>
+              <Button variant='primary' className="note-btn view-note-btn" onClick={() => { setSelectedNote(note); setShowViewModal(true); }}>
+                View Note
+              </Button>
+              <Button variant='warning' className="note-btn update-note-btn" onClick={() => { setSelectedNote(note); setShowUpdateModal(true); }}>
+                Update Note
+              </Button>
+              <Button variant='danger' className="note-btn delete-note-btn" onClick={() => deleteNote(note._id)}>Delete Note</Button>
             </div>
-          ))}
-        </>
-      ) : (
-        <p>You have no notes.</p>
-      )}
-      <ViewNoteModal
-        show={showViewModal}
-        onHide={() => setShowViewModal(false)}
-        note={selectedNote}
-      />
-       <UpdateNoteModal
-        show={showUpdateModal}
-        onHide={() => setShowUpdateModal(false)}
-        note={selectedNote}
-        onChange={handleNoteChange}
-        onSave={handleSaveNote}
-      />
-      <h2>Add a new note</h2>
-      <input
-        className="form-control my-2"
-        value={newNote.title}
-        onChange={e => setNewNote({ ...newNote, title: e.target.value })}
-        placeholder="Title"
-        required
-      />
-      <textarea
-        className="form-control my-2"
-        value={newNote.content}
-        onChange={e => setNewNote({ ...newNote, content: e.target.value })}
-        placeholder="Content"
-        required
-      />
-      <Button className="createNote" onClick={addNote}>Add Note</Button>
-    </div>
-  );
+          </div>
+        ))}
+      </>
+    ) : (
+      <p>You have no notes.</p>
+    )}
+    <ViewNoteModal
+      show={showViewModal}
+      onHide={() => setShowViewModal(false)}
+      note={selectedNote}
+    />
+    <UpdateNoteModal
+      show={showUpdateModal}
+      onHide={() => setShowUpdateModal(false)}
+      note={selectedNote}
+      onChange={handleNoteChange}
+      onSave={handleSaveNote}
+    />
+    <h2>Add a new note</h2>
+    <input
+      className="form-control my-2"
+      value={newNote.title}
+      onChange={e => setNewNote({ ...newNote, title: e.target.value })}
+      placeholder="Title"
+      required
+    />
+    <textarea
+      className="form-control my-2"
+      value={newNote.content}
+      onChange={e => setNewNote({ ...newNote, content: e.target.value })}
+      placeholder="Content"
+      required
+    />
+    <Button className="createNote" onClick={addNote}>Add Note</Button>
+  </div>
+);
 };
 
 export default NotesIndex;
