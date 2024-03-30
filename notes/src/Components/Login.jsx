@@ -49,27 +49,27 @@ const Login = () => {
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm={4} htmlFor="userName">UserName:</Form.Label>
               <Col sm={8}>
-              <Form.Control
-                type="text"
-                id="userName"
-                name="userName"
-                required
-                value={credentials.userName}
-                onChange={handleInputChange}
-              />
+                <Form.Control
+                  type="text"
+                  id="userName"
+                  name="userName"
+                  required
+                  value={credentials.userName}
+                  onChange={handleInputChange}
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm={4} htmlFor="password">Password:</Form.Label>
               <Col sm={8}>
-              <Form.Control
-                type="password"
-                id="password"
-                name="password"
-                required
-                value={credentials.password}
-                onChange={handleInputChange}
-              />
+                <Form.Control
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  value={credentials.password}
+                  onChange={handleInputChange}
+                />
               </Col>
             </Form.Group>
             <div className="d-grid">
